@@ -24,12 +24,10 @@ tests = {
             console.warn("No piwik found");
             return false;
         }
-        var results = {
-            UrltoPiwikJs: this.URLtoPiwikJS()
+        return {
+            UrltoPiwikJs: this.URLtoPiwikJS(),
+            isScriptAsync: this.isScriptAsync()
         };
-        console.log(this.URLtoPiwikJS());
-        console.log(this.isScriptAsync());
-        return results;
     }
 };
 

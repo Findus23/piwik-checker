@@ -1,16 +1,26 @@
 document.addEventListener('DOMContentLoaded', function() {
+    var data = {request: {}};
+
+    function printData() {
+        document.querySelector('#response').innerHTML = JSON.stringify(data, null, 4);
+
+    }
 
     (function createChannel() {
         //Create a port with background page for continous message communication
-        var port = chrome.extension.connect({
+        var port = chrome.runtime.connect({
             name: "Sample Communication" //Given a Name
         });
 
         // Listen to messages from the background page
         port.onMessage.addListener(function(message) {
-
-            document.querySelector('#response').innerHTML = JSON.stringify(message, null, 4);
-            // port.postMessage(message);
+            if (message.action === 'injectResponse') {
+                data.inject = message.data;
+                // port.postMessage(message);
+            } else if (message.action === "requestResponse") {
+                data.request[message.file] = message.data;
+            }
+            printData()
         });
 
     }());

@@ -4,27 +4,28 @@
 // Can use:
 // chrome.tabs.*
 // chrome.extension.*
-console.log("willBeSendToBackgroundJs");
 
 chrome.extension.onConnect.addListener(function(port) {
 
-    extentionID = chrome.runtime.id;
     function extensionListener(message, sender, sendResponse) {
-        console.log("got message");
         if (message.tabId) {
             if (message.action === 'inject') {
                 //Evaluate script in inspectedPage
                 chrome.tabs.executeScript(message.tabId, {file: "inject.js"}, function(result) {
-                    port.postMessage(result);
-                    console.log(result);
+                    port.postMessage({action: "injectResponse", data: result[0]});
                 });
-
-                console.log("got message")
+                console.log("inject")
             } else if (message.action === "request") {
+                console.log("request");
                 chrome.webRequest.onCompleted.addListener(
                     function(details) {
                         console.log(details);
-                        // return {cancel: details.url.indexOf("://piwik.gattinger-wachau.at") !== -1};
+                        port.postMessage({
+                            action: "requestResponse",
+                            file: (details.url.indexOf("piwik.js") !== -1) ? "piwik.js" : "piwik.php",
+                            data: details
+                        });
+
                     },
                     {urls: ["*://*/piwik.js", "*://*/piwik.php*"], tabId: message.tabId} // only look for request in open tab
                 );
