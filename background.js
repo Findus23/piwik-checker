@@ -20,9 +20,15 @@ chrome.extension.onConnect.addListener(function(port) {
                 chrome.webRequest.onCompleted.addListener(
                     function(details) {
                         console.log(details);
+                        var file;
+                        if (details.url.indexOf("piwik.js") !== -1) {
+                            file = "piwik.js";
+                        } else if (details.url.indexOf("action_name") !== -1) {
+                            file = "piwik.php";
+                        }
                         port.postMessage({
                             action: "requestResponse",
-                            file: (details.url.indexOf("piwik.js") !== -1) ? "piwik.js" : "piwik.php",
+                            file: file,
                             data: details
                         });
 

@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (message.action === 'injectResponse') {
                 data.inject = message.data;
                 // port.postMessage(message);
-            } else if (message.action === "requestResponse") {
+            } else if (message.action === "requestResponse" && message.file) {
                 data.request[message.file] = message.data;
             }
             printData()
@@ -26,10 +26,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }());
 
 
-    console.log(document.querySelector('#start'));
     document.querySelector('#start').addEventListener('click', function() {
-        chrome.extension.sendMessage({action: "inject", tabId: chrome.devtools.inspectedWindow.tabId});
-        chrome.extension.sendMessage({action: "request", tabId: chrome.devtools.inspectedWindow.tabId});
+        chrome.runtime.sendMessage({action: "inject", tabId: chrome.devtools.inspectedWindow.tabId});
+        chrome.runtime.sendMessage({action: "request", tabId: chrome.devtools.inspectedWindow.tabId});
+        // chrome.tabs.reload(chrome.devtools.inspectedWindow.tabId);
         console.log("sent message")
     }, false);
 });
