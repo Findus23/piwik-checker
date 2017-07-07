@@ -23,6 +23,13 @@ tests = {
         };
 
     },
+    isPageHTTPS: function() {
+        return location.protocol === "https:"
+    },
+    usesPiwik: function() {
+        return !!this.piwikJSScriptObject();
+    },
+    // -------------
     /**
      * @return {string}
      */
@@ -30,14 +37,21 @@ tests = {
         return this.scriptObject.getAttribute("src");
     },
     piwikUsesHTTPS: function() {
-        return this.parseURL(this.URLtoPiwikJS())["protocol"] === "https:"
+        return this.parseURL(this.URLtoPiwikJS()).protocol === "https:"
     },
     isURLprotocolRelative: function() {
         return this.URLtoPiwikJS().startsWith("//");
     },
+    isMixedContent: function() {
+        return this.isPageHTTPS() && !this.piwikUsesHTTPS();
+    },
 
     isScriptAsync: function() {
         return this.scriptObject.hasAttribute("async") && this.scriptObject.hasAttribute("defer")
+    },
+
+    isPageUTF8: function() {
+        return document.characterSet.toLowerCase() === "utf-8";
     },
     main: function() {
         this.scriptObject = this.piwikJSScriptObject();
@@ -49,9 +63,11 @@ tests = {
             UrltoPiwikJs: this.URLtoPiwikJS(),
             piwikUsesHTTPS: this.piwikUsesHTTPS(),
             isURLprotocolRelative: this.isURLprotocolRelative(),
+            isMixedContent: this.isMixedContent(),
             isScriptAsync: this.isScriptAsync(),
+            isPageUTF8: this.isPageUTF8()
         };
     }
 };
-
-willBeSendToBackgroundJs = tests.main();
+chrome.runtime.sendMessage({action: "test", usesPiwik: tests.usesPiwik()});
+// willBeSendToBackgroundJs = tests.main();

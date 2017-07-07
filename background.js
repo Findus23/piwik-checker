@@ -7,19 +7,21 @@
 
 chrome.extension.onConnect.addListener(function(port) {
 
-    function extensionListener(message, sender, sendResponse) {
-        if (message.tabId) {
-            if (message.action === 'inject') {
-                //Evaluate script in inspectedPage
-                chrome.tabs.executeScript(message.tabId, {file: "inject.js"}, function(result) {
-                    port.postMessage({action: "injectResponse", data: result[0]});
-                });
-                console.log("inject")
-            } else if (message.action === "request") {
-                console.log("request");
-                chrome.webRequest.onCompleted.addListener(
-                    function(details) {
+        function extensionListener(message, sender, sendResponse) {
+            if (message.tabId) {
+                if (message.action === 'inject') {
+                    chrome.tabs.executeScript({
+                        code: 'tests.main();'
+                    }, function(result) {
+                        port.postMessage({action: "injectResponse", data: result[0]});
+                    });
+
+                    console.log("inject")
+                } else if (message.action === "request") {
+                    console.log("request");
+                    handleWebRequest = function(details, test) {
                         console.log(details);
+                        console.log(test);
                         var file;
                         if (details.url.indexOf("piwik.js") !== -1) {
                             file = "piwik.js";
@@ -31,31 +33,43 @@ chrome.extension.onConnect.addListener(function(port) {
                             file: file,
                             data: details
                         });
+                    };
 
-                    },
-                    {urls: ["*://*/piwik.js", "*://*/piwik.php*"], tabId: message.tabId} // only look for request in open tab
-                );
+                    chrome.webRequest.onCompleted.addListener(handleWebRequest,
+                        {urls: ["*://*/piwik.js", "*://*/piwik.php*"], tabId: message.tabId} // only look for request in open tab
+                    );
+                    chrome.webRequest.onErrorOccurred.addListener(handleWebRequest,
+                        {urls: ["*://*/piwik.js", "*://*/piwik.php*"], tabId: message.tabId} // only look for request in open tab
+                    );
+
+                }
+
+                // This accepts messages from the inspectedPage and
+                // sends them to the panel
+            } else {
+                port.postMessage(message);
             }
-
-            // This accepts messages from the inspectedPage and
-            // sends them to the panel
-        } else {
-            port.postMessage(message);
+            sendResponse(message);
         }
-        sendResponse(message);
+
+        // Listens to messages sent from the panel
+        chrome.extension.onMessage.addListener(extensionListener);
+        console.log("connected to extention");
+
+        port.onDisconnect.addListener(function(port) {
+            chrome.extension.onMessage.removeListener(extensionListener);
+        });
+
+
     }
+);
 
-    // Listens to messages sent from the panel
-    chrome.extension.onMessage.addListener(extensionListener);
-    console.log("connected to extention");
-
-    port.onDisconnect.addListener(function(port) {
-        chrome.extension.onMessage.removeListener(extensionListener);
-    });
-
-
-});
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    return true;
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+    console.log(sender.tab);
+    if (message.action === "test") {
+        if (message.usesPiwik) {
+            chrome.browserAction.setBadgeText({text: "Piwik!", tabId: sender.tab.id});
+        }
+    }
 });
 
