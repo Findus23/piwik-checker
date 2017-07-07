@@ -8,11 +8,32 @@ tests = {
             }
         }
     },
+
+    parseURL: function(url) {
+        var a = document.createElement('a');
+        a.href = 'https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=picture%20of%20a%20potato';
+        // document.removeChild(a);
+        return {
+            protocol: a.protocol,
+            host: a.host,
+            hostname: a.hostname,
+            port: a.port,
+            pathname: a.pathname,
+            search: a.search
+        };
+
+    },
     /**
      * @return {string}
      */
     URLtoPiwikJS: function() {
         return this.scriptObject.getAttribute("src");
+    },
+    piwikUsesHTTPS: function() {
+        return this.parseURL(this.URLtoPiwikJS())["protocol"] === "https:"
+    },
+    isURLprotocolRelative: function() {
+        return this.URLtoPiwikJS().startsWith("//");
     },
 
     isScriptAsync: function() {
@@ -26,7 +47,9 @@ tests = {
         }
         return {
             UrltoPiwikJs: this.URLtoPiwikJS(),
-            isScriptAsync: this.isScriptAsync()
+            piwikUsesHTTPS: this.piwikUsesHTTPS(),
+            isURLprotocolRelative: this.isURLprotocolRelative(),
+            isScriptAsync: this.isScriptAsync(),
         };
     }
 };
