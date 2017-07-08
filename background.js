@@ -5,7 +5,7 @@
 // chrome.tabs.*
 // chrome.extension.*
 
-chrome.extension.onConnect.addListener(function(port) {
+chrome.runtime.onConnect.addListener(function(port) {
 
         function extensionListener(message, sender, sendResponse) {
             if (message.tabId) {
@@ -17,7 +17,8 @@ chrome.extension.onConnect.addListener(function(port) {
                     });
 
                     console.log("inject")
-                } else if (message.action === "request") {
+                } else var handleWebRequest;
+                if (message.action === "request") {
                     console.log("request");
                     handleWebRequest = function(details, test) {
                         console.log(details);
@@ -53,11 +54,11 @@ chrome.extension.onConnect.addListener(function(port) {
         }
 
         // Listens to messages sent from the panel
-        chrome.extension.onMessage.addListener(extensionListener);
+        chrome.runtime.onMessage.addListener(extensionListener);
         console.log("connected to extention");
 
         port.onDisconnect.addListener(function(port) {
-            chrome.extension.onMessage.removeListener(extensionListener);
+            chrome.runtime.onMessage.removeListener(extensionListener);
         });
 
 

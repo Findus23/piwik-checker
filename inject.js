@@ -11,7 +11,7 @@ tests = {
 
     parseURL: function(url) {
         var a = document.createElement('a');
-        a.href = 'https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=picture%20of%20a%20potato';
+        a.href = url;
         // document.removeChild(a);
         return {
             protocol: a.protocol,

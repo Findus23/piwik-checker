@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Piwik Checker",
-  "description": "Description",
+  "description": "__MSG_extention_description__",
   "version": "0.1",
   "devtools_page": "devtools.html",
   "permissions": [
@@ -40,5 +40,6 @@
       ],
       "run_at": "document_end"
     }
-  ]
+  ],
+  "default_locale": "en"
 }
