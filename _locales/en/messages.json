@@ -1,0 +1,10 @@
+{
+  "extention_description": {
+    "message": "[the description]",
+    "description": "the short discription shown in the extention list"
+  },
+  "popup_text": {
+    "message": "This page uses Piwik",
+    "description": "text shown in popup when clicked on button in navigation bar"
+  }
+}
