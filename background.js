@@ -65,10 +65,11 @@ chrome.extension.onConnect.addListener(function(port) {
 );
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-    console.log(sender.tab);
     if (message.action === "test") {
         if (message.usesPiwik) {
-            chrome.browserAction.setBadgeText({text: "Piwik!", tabId: sender.tab.id});
+            chrome.pageAction.show(sender.tab.id);
+        } else {
+            chrome.pageAction.hide(sender.tab.id);
         }
     }
 });
