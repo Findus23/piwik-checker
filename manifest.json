@@ -3,7 +3,7 @@
   "name": "Piwik Checker",
   "description": "__MSG_extention_description__",
   "version": "0.1",
-  "devtools_page": "devtools.html",
+  "devtools_page": "views/devtools.html",
   "permissions": [
     "webRequest",
     "webRequestBlocking",
@@ -13,7 +13,7 @@
   ],
   "background": {
     "scripts": [
-      "background.js"
+      "js/background.js"
     ]
   },
   "icons": {
@@ -28,12 +28,12 @@
       "32": "images/icon32.png"
     },
     "default_title": "Piwik Checker",
-    "default_popup": "popup.html"
+    "default_popup": "views/popup.html"
   },
   "content_scripts": [
     {
       "js": [
-        "inject.js"
+        "js/inject.js"
       ],
       "matches": [
         "*://*/*"
