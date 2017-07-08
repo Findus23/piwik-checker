@@ -37,21 +37,32 @@ tests = {
         return this.scriptObject.getAttribute("src");
     },
     piwikUsesHTTPS: function() {
-        return this.parseURL(this.URLtoPiwikJS()).protocol === "https:"
+        return {
+            success: this.parseURL(this.URLtoPiwikJS()).protocol === "https:"
+        }
     },
-    isURLprotocolRelative: function() {
-        return this.URLtoPiwikJS().startsWith("//");
+    noProtocolRelativeURL: function() {
+        return {
+            success: !this.URLtoPiwikJS().startsWith("//")
+        };
     },
-    isMixedContent: function() {
-        return this.isPageHTTPS() && !this.piwikUsesHTTPS();
+    noMixedContent: function() {
+        return {
+            success: !(this.isPageHTTPS() && !this.piwikUsesHTTPS())
+        };
     },
 
     isScriptAsync: function() {
-        return this.scriptObject.hasAttribute("async") && this.scriptObject.hasAttribute("defer")
+        return {
+            success: this.scriptObject.hasAttribute("async") && this.scriptObject.hasAttribute("defer")
+        }
     },
 
     isPageUTF8: function() {
-        return document.characterSet.toLowerCase() === "utf-8";
+        return {
+            success: document.characterSet.toLowerCase() === "utf-8",
+            substitutions: [document.characterSet]
+        };
     },
     main: function() {
         this.scriptObject = this.piwikJSScriptObject();
@@ -60,10 +71,9 @@ tests = {
             return false;
         }
         return {
-            UrltoPiwikJs: this.URLtoPiwikJS(),
             piwikUsesHTTPS: this.piwikUsesHTTPS(),
-            isURLprotocolRelative: this.isURLprotocolRelative(),
-            isMixedContent: this.isMixedContent(),
+            noProtocolRelativeURL: this.noProtocolRelativeURL(),
+            noMixedContent: this.noMixedContent(),
             isScriptAsync: this.isScriptAsync(),
             isPageUTF8: this.isPageUTF8()
         };

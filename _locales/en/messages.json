@@ -6,5 +6,51 @@
   "popup_text": {
     "message": "This page uses Piwik",
     "description": "text shown in popup when clicked on button in navigation bar"
+  },
+  "piwikUsesHTTPS_true": {
+    "message": "Is HTTPS",
+    "description": ""
+  },
+  "piwikUsesHTTPS_false": {
+    "message": "Is not HTTPS",
+    "description": ""
+  },
+  "isPageUTF8_true": {
+    "message": "UTF-8 as recommended",
+    "description": ""
+  },
+  "isPageUTF8_false": {
+    "message": "Using UTF-8 encoding can avoid errors (You are using \"$encoding$\")",
+    "description": "",
+    "placeholders": {
+      "encoding": {
+        "content": "$1",
+        "example": "Encoding of page"
+      }
+    }
+  },
+  "noMixedContent_true": {
+    "message": "ok",
+    "description": ""
+  },
+  "noMixedContent_false": {
+    "message": "Mixed Content Warning!",
+    "description": ""
+  },
+  "noProtocolRelativeURL_true": {
+    "message": "ok",
+    "description": ""
+  },
+  "noProtocolRelativeURL_false": {
+    "message": "Consider using https in the tracking code",
+    "description": ""
+  },
+  "isScriptAsync_true": {
+    "message": "ok",
+    "description": ""
+  },
+  "isScriptAsync_false": {
+    "message": "consider loading the tracing code asynchronously to speed up page load",
+    "description": ""
   }
 }

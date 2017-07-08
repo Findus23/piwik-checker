@@ -2,8 +2,41 @@ document.addEventListener('DOMContentLoaded', function() {
     var data = {request: {}};
 
     function printData() {
-        document.querySelector('#response').innerHTML = JSON.stringify(data, null, 4);
+        document.querySelector('#json').innerHTML = JSON.stringify(data, null, 4);
+        function tableCreate() {
+            var tbl = document.querySelector('.table');
+            tbl.innerHTML = "";
 
+            for (var testname in data.inject) {
+                if (data.inject.hasOwnProperty(testname)) {
+                    var response = data.inject[testname];
+                    var tr = tbl.insertRow();
+                    tr.title = testname;
+                    var status = tr.insertCell(0), details = tr.insertCell(1);
+                    var Result = true;
+                    if (response.success === true) {
+                        tr.classList.add("table-success");
+                        status.innerText = "\u2714"
+                    } else if (response.success === false) {
+                        tr.classList.add("table-warning");
+                        status.innerText = "\u2718"
+
+                    } else {
+                        Result = false;
+                        tr.classList.add("table-active");
+                        status.innerText = "?"
+                    }
+                    status.title = response.success;
+
+                    if (Result) {
+                        var messageKey = testname + "_" + response.success;
+                        details.innerHTML = chrome.i18n.getMessage(messageKey, response.substitutions)
+                    }
+                }
+            }
+        }
+
+        tableCreate();
     }
 
     (function createChannel() {
@@ -25,11 +58,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     }());
 
-
+    chrome.runtime.sendMessage({action: "inject", tabId: chrome.devtools.inspectedWindow.tabId});
+    chrome.runtime.sendMessage({action: "request", tabId: chrome.devtools.inspectedWindow.tabId});
     document.querySelector('#start').addEventListener('click', function() {
         chrome.runtime.sendMessage({action: "inject", tabId: chrome.devtools.inspectedWindow.tabId});
-        chrome.runtime.sendMessage({action: "request", tabId: chrome.devtools.inspectedWindow.tabId});
-        // chrome.tabs.reload(chrome.devtools.inspectedWindow.tabId);
-        console.log("sent message")
+        // chrome.runtime.sendMessage({action: "request", tabId: chrome.devtools.inspectedWindow.tabId});
     }, false);
 });
