@@ -7,6 +7,18 @@
     "message": "This page uses Piwik",
     "description": "text shown in popup when clicked on button in navigation bar"
   },
+  "popupExplaination": {
+    "message": "Open the developer tools to debug the tracking code",
+    "description": ""
+  },
+  "piwikNotFoundHeading": {
+    "message": "The piwik tracking code couldn't be found.",
+    "description": ""
+  },
+  "piwikNotFound": {
+    "message": "Check if ...",
+    "description": ""
+  },
   "piwikUsesHTTPS_true": {
     "message": "Is HTTPS",
     "description": ""

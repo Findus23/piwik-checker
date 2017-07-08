@@ -49,6 +49,18 @@ document.addEventListener('DOMContentLoaded', function() {
         port.onMessage.addListener(function(message) {
             if (message.action === 'injectResponse') {
                 data.inject = message.data;
+                var piwikNotFoundHeading = document.getElementById("piwikNotFoundHeading");
+                var piwikNotFound = document.getElementById("piwikNotFound");
+                if (!data.inject) {
+                    piwikNotFoundHeading.innerText = chrome.i18n.getMessage("piwikNotFoundHeading");
+                    piwikNotFound.innerText = chrome.i18n.getMessage("piwikNotFound");
+                    piwikNotFound.style.display = "inline-block";
+                    piwikNotFoundHeading.style.display = "inline-block";
+                } else {
+                    piwikNotFound.style.display = "none";
+                    piwikNotFoundHeading.style.display = "none";
+
+                }
                 // port.postMessage(message);
             } else if (message.action === "requestResponse" && message.file) {
                 data.request[message.file] = message.data;
