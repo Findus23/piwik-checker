@@ -2,10 +2,10 @@ document.addEventListener('DOMContentLoaded', function() {
     var data = {request: {}};
 
     function printData() {
-        document.querySelector('#json').innerHTML = JSON.stringify(data, null, 4);
+        document.querySelector('#json').innerText = JSON.stringify(data, null, 4);
         function tableCreate() {
             var tbl = document.querySelector('.table');
-            tbl.innerHTML = "";
+            tbl.innerText = "";
 
             for (var testname in data.tests) {
                 if (data.tests.hasOwnProperty(testname)) {
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     if (Result) {
                         var messageKey = testname + "_" + response.success;
-                        details.innerHTML = chrome.i18n.getMessage(messageKey, response.substitutions);
+                        details.innerText = chrome.i18n.getMessage(messageKey, response.substitutions);
                     }
                 }
             }
