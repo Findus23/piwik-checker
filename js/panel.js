@@ -7,9 +7,9 @@ document.addEventListener('DOMContentLoaded', function() {
             var tbl = document.querySelector('.table');
             tbl.innerHTML = "";
 
-            for (var testname in data.inject) {
-                if (data.inject.hasOwnProperty(testname)) {
-                    var response = data.inject[testname];
+            for (var testname in data.tests) {
+                if (data.tests.hasOwnProperty(testname)) {
+                    var response = data.tests[testname];
                     var tr = tbl.insertRow();
                     tr.title = testname;
                     var status = tr.insertCell(0), details = tr.insertCell(1);
@@ -48,10 +48,11 @@ document.addEventListener('DOMContentLoaded', function() {
         // Listen to messages from the background page
         port.onMessage.addListener(function(message) {
             if (message.action === 'injectResponse') {
-                data.inject = message.data;
+                data.tests = message.data.results;
+                data.info = message.data.info;
                 var piwikNotFoundHeading = document.getElementById("piwikNotFoundHeading");
                 var piwikNotFound = document.getElementById("piwikNotFound");
-                if (!data.inject) {
+                if (!data.tests) {
                     piwikNotFoundHeading.innerText = chrome.i18n.getMessage("piwikNotFoundHeading");
                     piwikNotFound.innerText = chrome.i18n.getMessage("piwikNotFound");
                     piwikNotFound.style.display = "inline-block";
@@ -59,7 +60,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     piwikNotFound.style.display = "none";
                     piwikNotFoundHeading.style.display = "none";
-
+                    var urlElement = document.getElementById("piwikURL");
+                    urlElement.innerText = data.info.piwikURL;
+                    if (data.tests.noProtocolRelativeURL.success) {
+                        urlElement.href = data.info.piwikURL.slice(0, -8); // remove "piwik.js" from link
+                    } else {
+                        urlElement.href = "https:" + data.info.piwikURL.slice(0, -8);
+                    }
                 }
                 // port.postMessage(message);
             } else if (message.action === "requestResponse" && message.file) {
@@ -73,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
     chrome.runtime.sendMessage({action: "inject", tabId: chrome.devtools.inspectedWindow.tabId});
     chrome.runtime.sendMessage({action: "request", tabId: chrome.devtools.inspectedWindow.tabId});
     document.querySelector('#start').addEventListener('click', function() {
+        chrome.devtools.inspectedWindow.reload();
         chrome.runtime.sendMessage({action: "inject", tabId: chrome.devtools.inspectedWindow.tabId});
-        // chrome.runtime.sendMessage({action: "request", tabId: chrome.devtools.inspectedWindow.tabId});
     }, false);
 });

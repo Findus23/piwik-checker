@@ -6,8 +6,8 @@
 		<style>
 			button {
 				position: absolute;
-				top:5px;
-				right:5px;
+				top: 5px;
+				right: 5px;
 			}
 		</style>
 		<script src="../js/panel.js"></script>
@@ -15,10 +15,11 @@
 	<body>
 		<div class="container">
 			<h2>Piwik Checker <span id="piwikNotFoundHeading" class="badge badge-warning"></span></h2>
+			<small><a href="#" id="piwikURL" target="_blank"></a></small>
 			<p id="piwikNotFound"></p>
-			<button  class="btn btn-secondary" id="start">Reload</button>
+			<button class="btn btn-secondary" id="start">Reload</button>
 			<table class="table"></table>
-			<samp id="json"></samp>
+			<pre id="json"></pre>
 
 		</div>
 	</body>

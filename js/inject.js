@@ -71,11 +71,16 @@ tests = {
             return false;
         }
         return {
-            piwikUsesHTTPS: this.piwikUsesHTTPS(),
-            noProtocolRelativeURL: this.noProtocolRelativeURL(),
-            noMixedContent: this.noMixedContent(),
-            isScriptAsync: this.isScriptAsync(),
-            isPageUTF8: this.isPageUTF8()
+            info: {
+                piwikURL: this.URLtoPiwikJS()
+            },
+            results: {
+                piwikUsesHTTPS: this.piwikUsesHTTPS(),
+                noProtocolRelativeURL: this.noProtocolRelativeURL(),
+                noMixedContent: this.noMixedContent(),
+                isScriptAsync: this.isScriptAsync(),
+                isPageUTF8: this.isPageUTF8()
+            }
         };
     }
 };
