@@ -24,7 +24,7 @@ tests = {
 
     },
     isPageHTTPS: function() {
-        return location.protocol === "https:"
+        return location.protocol === "https:";
     },
     usesPiwik: function() {
         return !!this.piwikJSScriptObject();
@@ -39,7 +39,7 @@ tests = {
     piwikUsesHTTPS: function() {
         return {
             success: this.parseURL(this.URLtoPiwikJS()).protocol === "https:"
-        }
+        };
     },
     noProtocolRelativeURL: function() {
         return {
@@ -55,7 +55,7 @@ tests = {
     isScriptAsync: function() {
         return {
             success: this.scriptObject.hasAttribute("async") && this.scriptObject.hasAttribute("defer")
-        }
+        };
     },
 
     isPageUTF8: function() {

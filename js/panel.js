@@ -16,21 +16,21 @@ document.addEventListener('DOMContentLoaded', function() {
                     var Result = true;
                     if (response.success === true) {
                         tr.classList.add("table-success");
-                        status.innerText = "\u2714"
+                        status.innerText = "\u2714";
                     } else if (response.success === false) {
                         tr.classList.add("table-warning");
-                        status.innerText = "\u2718"
+                        status.innerText = "\u2718";
 
                     } else {
                         Result = false;
                         tr.classList.add("table-active");
-                        status.innerText = "?"
+                        status.innerText = "?";
                     }
                     status.title = response.success;
 
                     if (Result) {
                         var messageKey = testname + "_" + response.success;
-                        details.innerHTML = chrome.i18n.getMessage(messageKey, response.substitutions)
+                        details.innerHTML = chrome.i18n.getMessage(messageKey, response.substitutions);
                     }
                 }
             }
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (message.action === "requestResponse" && message.file) {
                 data.request[message.file] = message.data;
             }
-            printData()
+            printData();
         });
 
     }());

@@ -16,8 +16,9 @@ chrome.runtime.onConnect.addListener(function(port) {
                         port.postMessage({action: "injectResponse", data: result[0]});
                     });
 
-                    console.log("inject")
-                } else var handleWebRequest;
+                    console.log("inject");
+                }
+                var handleWebRequest;
                 if (message.action === "request") {
                     console.log("request");
                     handleWebRequest = function(details, test) {
