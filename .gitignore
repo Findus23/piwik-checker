@@ -1,2 +1,4 @@
 .idea/
 check.md
+node_modules/
+libs/
